@@ -1,14 +1,25 @@
 ---
-title: "My First Blog"
-date: 24, August, 2021
+title: Reducing Salesforce Formula Field Complexity with Apex
+date: June 17, 2022 9:00 AM
 ---
+# Introduction
 
-# Welcome to my blog
+One of the most powerful types of custom fields in Salesforce is the formula field. It offers a ton of versatility and can often solve a wide array of business problems. It can reference other fields, return data in many different types, and will also automatically be updated on every record it is placed. However, a formula field might not always be the right choice for the job. 
 
-This is an markdown file with some front matter.
-Yes you have key value pair in yaml format covered by --- on the of markdown file.
-The yaml style key value pair on the top is called front matter.
+## Pitfalls of Salesforce Formula Fields
 
-## Header 2
+While a formula field can offer a lot of power out of the box, it can potentially lack scalability. Recently, I encountered a custom formula that was built to return a formatted string of values based on the options that were chosen in a multi-select picklist.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+![Passing Multi-Select Values From One Object to Another Object – Jenwlee's  Salesforce Blog](https://jenwlee.files.wordpress.com/2018/01/multi-select-picklist-seal.jpg?w=288&h=225)
+
+In the formula's final form, we were left with a field that contained *313 words of text*. The logic contained in the formula would check each option in the multi-select picklist and if it was selected, replace the value with the plaintext followed by a comma.
+
+Exhibit A:
+
+`IF(INCLUDES(Opportunity.MultiSelectPicklistValue__c, "Baby Seal"), "Baby Seal,", NULL)`
+
+Rinse and repeat for 20+ lines, essentially.
+
+
+
+## Challenge
